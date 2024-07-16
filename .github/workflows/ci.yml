@@ -14,8 +14,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Login Dockerhub
       env: 
-        DOCKER_USERNAME: ${{secrets.rubytech}}
-        DOCKER_PASSWORD: ${{secrets.Starces*?}}
+        DOCKER_USERNAME: ${{secrets.USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.PASSWORD}}
       run: docker login -u $D
     - name: Build the Docker image
       run: docker build -t aws-test
