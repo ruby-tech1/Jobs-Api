@@ -1,4 +1,6 @@
-FROM node:20
+FROM node:21
+
+RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
@@ -9,4 +11,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 5000
-CMD ['node', 'app.js']
+CMD ['npm', 'start']
