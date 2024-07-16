@@ -84,7 +84,7 @@ const updateJob = async (req, res) => {
   } = req;
 
   if (company === "" || position === "") {
-    throw new BadRequestError("Company or Position fields cannot be empty");
+    throw new BadRequestError("Company or position fields cannot be empty");
   }
   const job = await Job.findByIdAndUpdate(
     { _id: jobId, createdBy: userId },
@@ -142,19 +142,23 @@ const showStats = async (req, res) => {
         count: { $sum: 1 },
       },
     },
-    { $sort: { '_id.year': -1, '_id.month': -1 } },
+    { $sort: { "_id.year": -1, "_id.month": -1 } },
     { $limit: 6 },
   ]);
 
-  monthlyApplications = monthlyApplications.map((item) => {
-    const {_id: {year, month}, count} = item;
-    const date = moment()
-      .month(month -1)
-      .year(year)
-      .format('MMMM Y')
-    return {date, count}
-  })
-  .reverse();
+  monthlyApplications = monthlyApplications
+    .map((item) => {
+      const {
+        _id: { year, month },
+        count,
+      } = item;
+      const date = moment()
+        .month(month - 1)
+        .year(year)
+        .format("MMMM Y");
+      return { date, count };
+    })
+    .reverse();
 
   console.log(monthlyApplications);
 
