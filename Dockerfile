@@ -1,20 +1,19 @@
-# Use an existing image as a base
 FROM node:21
 
-# Set the working directory
+# Create app directory
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json files
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
 COPY package*.json ./
 
-# Install the dependencies
 RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
 
-# Copy the rest of the code
+# Bundle app source
 COPY . .
 
-# Expose the port that the app listens on
 EXPOSE 5000
-
-# Define the command to run the app
-CMD ["node", "app.js"]
+CMD [ "node", "app.js" ]

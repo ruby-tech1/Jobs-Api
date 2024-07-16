@@ -16,4 +16,4 @@ jobs:
       - name: Delete Old Docker Container
         run: sudo docker rm -f aws-test-container || true
       - name: Run Docker Container
-        run: sudo docker run -d -p 5000:5000 --name aws-test-container rubytech/aws-test:latest
+        run: sudo docker run -d -p 5000:5000 --name aws-test-container rubytech/aws-test
