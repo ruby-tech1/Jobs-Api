@@ -9,13 +9,12 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v4
       - name: Stop PM2
         run: pm2 delete jobs-api || true
       - name: Delete Existing repo
         run: rm -r Jobs-Api || true
       - name: Clone From GitHub
-        run: git clone git@github.com:ruby-tech1/Jobs-Api.git
+        run: git clone git@github.com:ruby-tech1/Jobs-Api.git || git clone https://github.com/ruby-tech1/Jobs-Api.git
       - name: Start Pm2
         run: pm2 start ecosystem.config.js || pm2 restart ecosystem.config.js
       - name: Restart Caddy
