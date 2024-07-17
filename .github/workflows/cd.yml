@@ -9,11 +9,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
       - name: Stop PM2 processes
         run: |
           pm2 delete all || echo "No PM2 processes to delete"
