@@ -5,17 +5,46 @@ on:
     branches: ["master"]
 
 jobs:
-  build:
+  deploy:
     runs-on: self-hosted
 
     steps:
-      - name: Stop PM2
-        run: pm2 delete all || true
-      - name: Delete Existing repo
-        run: rm -rf Jobs-Api || true
-      - name: Clone From GitHub
-        run: git clone git@github.com:ruby-tech1/Jobs-Api.git || echo "Failed to clone repo"
-      - name: Start Pm2
-        run: pm2 start ecosystem.config.js || pm2 restart ecosystem.config.js
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Stop PM2 processes
+        run: |
+          pm2 delete all || echo "No PM2 processes to delete"
+
+      - name: Remove existing repository
+        run: |
+          rm -rf Jobs-Api || echo "No existing Jobs-Api directory to remove"
+
+      - name: Clone repository
+        run: |
+          git clone git@github.com:ruby-tech1/Jobs-Api.git || (echo "Failed to clone repo" && exit 1)
+
+      - name: Install dependencies
+        working-directory: Jobs-Api
+        run: |
+          npm ci || (echo "Failed to install dependencies" && exit 1)
+
+      - name: Start or restart PM2 process
+        working-directory: Jobs-Api
+        run: |
+          if pm2 start ecosystem.config.js; then
+            echo "PM2 process started successfully"
+          else
+            echo "Failed to start PM2 process, attempting restart"
+            pm2 restart ecosystem.config.js || (echo "Failed to restart PM2 process" && exit 1)
+          fi
+
       - name: Restart Caddy
-        run: sudo systemctl restart caddy || echo "Failed to restart Caddy"
+        run: |
+          sudo systemctl restart caddy || (echo "Failed to restart Caddy" && exit 1)
+
+      - name: Deployment summary
+        run: |
+          echo "Deployment completed successfully"
