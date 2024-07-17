@@ -1,19 +1,19 @@
 name: CD Pipeline
 
 on:
-  workflow_run:
-    workflows: ["CI Pipeline"]
-    types:
-      - completed
+  push:
+    branches: ["master"]
 
 jobs:
   build:
     runs-on: self-hosted
 
     steps:
-      - name: Pull Docker Image
-        run: sudo docker pull rubytech/aws-test:latest
-      - name: Delete Old Docker Container
-        run: sudo docker rm -f aws-test-container || true
-      - name: Run Docker Container
-        run: sudo docker run -d -p 5000:5000 --env-file /home/ubuntu/env/.env --name aws-test-container rubytech/aws-test
+      - name: Pull From GitHub
+        run: git pull jobs master
+      - name: Stop Pm2
+        run: pm2 stop ecosystem.config.js
+      - name: Start Pm2
+        run: pm2 stop ecosystem.config.js
+      - name: Restart Caddy
+        run: sudo systemctl restart caddy
