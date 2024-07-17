@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Stop PM2
-        run: pm2 stop all || true
+        run: pm2 delete all || true
       - name: Delete Existing repo
         run: rm -rf Jobs-Api || true
       - name: Clone From GitHub
