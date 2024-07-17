@@ -10,12 +10,12 @@ jobs:
 
     steps:
       - name: Stop PM2
-        run: sudo pm2 stop jobs-api || true
+        run: pm2 stop all || true
       - name: Delete Existing repo
-        run: rm -r Jobs-Api || true
+        run: rm -rf Jobs-Api || true
       - name: Clone From GitHub
         run: git clone git@github.com:ruby-tech1/Jobs-Api.git || echo "Failed to clone repo"
       - name: Start Pm2
-        run: sudo pm2 start ecosystem.config.js || pm2 restart ecosystem.config.js
+        run: pm2 start ecosystem.config.js || pm2 restart ecosystem.config.js
       - name: Restart Caddy
         run: sudo systemctl restart caddy || echo "Failed to restart Caddy"
